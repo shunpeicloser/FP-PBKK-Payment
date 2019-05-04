@@ -1,0 +1,17 @@
+NoSQL = Schemaless
+
+{
+    wallet_id,
+    wallet_type,
+    wallet_balance
+}
+
+{
+    transaction_id,
+    transaction_type,
+    transaction_cashflow,
+    transaction_value,
+    sender_wallet,
+    receiver_wallet,
+    timestamp
+}
