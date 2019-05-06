@@ -1,17 +1,78 @@
-NoSQL = Schemaless
+NoSQL => Schemaless
 
+// base entity
 {
-    wallet_id,
-    wallet_type,
-    wallet_balance
+    id,
+    createdDate,
+    lastModifiedDate,
 }
 
+// base entity > wallet
 {
+    id,
+    createdDate,
+    lastModifiedDate,
+    
+    wallet_number,
+    wallet_type,
+    wallet_balance,
+}
+
+// base entity > transaction
+{
+    id,
+    createdDate,
+    lastModifiedDate,
+    
     transaction_id,
     transaction_type,
     transaction_cashflow,
     transaction_value,
-    sender_wallet,
-    receiver_wallet,
-    timestamp
+}
+
+// transaction > food order
+{
+    id,
+    createdDate,
+    lastModifiedDate,
+    
+    transaction_id,
+    transaction_type,
+    transaction_cashflow,
+    transaction_value,
+    
+    foodOrderBill,
+    foodOrderWallets,
+}
+
+// transaction > topup
+{
+    id,
+    createdDate,
+    lastModifiedDate,
+    
+    transaction_id,
+    transaction_type,
+    transaction_cashflow,
+    transaction_value,
+    
+    walletNumber,
+    topUpBalance,
+}
+
+// transaction > withdrawal
+{
+    id,
+    createdDate,
+    lastModifiedDate,
+    
+    transaction_id,
+    transaction_type,
+    transaction_cashflow,
+    transaction_value,
+    
+    walletNumber,
+    amount,
+    bankName,
+    bankAccount,
 }
