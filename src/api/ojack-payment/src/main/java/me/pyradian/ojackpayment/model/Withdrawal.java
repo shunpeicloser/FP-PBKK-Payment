@@ -1,5 +1,6 @@
 package me.pyradian.ojackpayment.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -30,6 +31,7 @@ public class Withdrawal extends Transaction{
         this.transactionType = "WITHDRAWAL";
     }
 
+    @JsonProperty("wallet_number")
     public String getWalletNumber() {
         return walletNumber;
     }
@@ -42,10 +44,12 @@ public class Withdrawal extends Transaction{
         return status;
     }
 
+    @JsonProperty("bank_name")
     public String getBankName() {
         return bankName;
     }
 
+    @JsonProperty("bank_account")
     public String getBankAccount() {
         return bankAccount;
     }

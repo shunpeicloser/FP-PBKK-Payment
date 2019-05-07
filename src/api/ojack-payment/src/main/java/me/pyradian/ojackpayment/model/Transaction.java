@@ -1,5 +1,6 @@
 package me.pyradian.ojackpayment.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,10 +18,12 @@ public class  Transaction extends BaseEntity{
     @Field("transaction_status")
     protected String status; // confirmed, canceled, pending
 
+    @JsonProperty("transaction_type")
     public String getTransactionType() {
         return transactionType;
     }
 
+    @JsonProperty("transaction_id")
     public String getTransactionId() {
         return transactionId;
     }

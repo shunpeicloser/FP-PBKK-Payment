@@ -1,5 +1,7 @@
 package me.pyradian.ojackpayment.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -18,6 +20,7 @@ public class BaseEntity {
         return id;
     }
 
+    @JsonProperty("created_date")
     public Date getCreatedDate() {
         return createdDate;
     }
@@ -26,6 +29,7 @@ public class BaseEntity {
         this.createdDate = createdDate;
     }
 
+    @JsonProperty("last_modified_date")
     public Date getLastModifiedDate() {
         return lastModifiedDate;
     }
