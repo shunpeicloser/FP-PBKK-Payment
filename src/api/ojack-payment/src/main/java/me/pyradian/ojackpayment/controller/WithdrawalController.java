@@ -79,7 +79,11 @@ public class WithdrawalController {
         if (!this.withdrawalService.isPending(wd))
             throw new BadRequestException("Withdrawal with ID " + withdrawalId + " is already confirmed/canceled");
 
+        Wallet w = this.walletRepository.findByWalletNumber(wd.getWalletNumber());
+        w.setBalance(w.getBalance()-wd.getAmount());
         wd.setStatus("confirmed");
+
+        this.walletRepository.save(w);
         this.withdrawalRepository.save(wd);
 
         return wd;
