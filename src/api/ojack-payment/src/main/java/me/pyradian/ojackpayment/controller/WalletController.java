@@ -32,7 +32,7 @@ public class WalletController {
 
     @TokenAuth(strict = false)
     @GetMapping
-    public Object getAllWallet(@Nullable @RequestParam("type") String type,
+    public Object getWallet(@Nullable @RequestParam("type") String type,
                                      @Nullable @RequestParam("balance_range") String balanceRange,
                                      @RequestHeader("Authorization") String token) {
         Claims claims = walletService.getClaims(token);
@@ -82,7 +82,7 @@ public class WalletController {
 
     @TokenAuth
     @GetMapping("/{walletNumber}")
-    public Wallet getWallet(@PathVariable("walletNumber") String walletNumber) {
+    public Wallet getWalletDetail(@PathVariable("walletNumber") String walletNumber) {
         Wallet w = walletService.repository().findByWalletNumber(walletNumber);
 
         if (w == null)
