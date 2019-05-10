@@ -41,7 +41,7 @@ public class TokenAuthAspect {
         }
 
         // get token account_type if not admin
-        if ( tokenAuth.auth_role().equals("USER") && tokenAuth.account_type().equals(claims.get("atp"))) {
+        if ( tokenAuth.auth_role().equals("USER") && !tokenAuth.account_type().equals(claims.get("atp"))) {
             throw new UnauthorizedException("Unauthorized bro!");
         }
     }
