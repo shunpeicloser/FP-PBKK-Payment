@@ -1,5 +1,7 @@
 package me.pyradian.ojackpayment.controller;
 
+import io.jsonwebtoken.Claims;
+import me.pyradian.ojackpayment.aop.TokenAuth;
 import me.pyradian.ojackpayment.exception.BadRequestException;
 import me.pyradian.ojackpayment.exception.NotFoundException;
 import me.pyradian.ojackpayment.model.Wallet;
@@ -19,49 +21,44 @@ import java.util.List;
 public class WithdrawalController {
     public static final String BASE_URL = "/api/v1/transaction/withdrawal";
 
-    private WalletRepository walletRepository;
-    private WithdrawalRepository withdrawalRepository;
     private WithdrawalService withdrawalService;
 
-    public WithdrawalController(WalletRepository walletRepository,WithdrawalRepository withdrawalRepository,
-                                WithdrawalService withdrawalService) {
-        this.walletRepository = walletRepository;
-        this.withdrawalRepository = withdrawalRepository;
+    public WithdrawalController(WithdrawalService withdrawalService) {
         this.withdrawalService = withdrawalService;
     }
 
+    @TokenAuth(strict = false)
     @GetMapping
-    public List<Withdrawal> getAllWithdrawal() {
-        return this.withdrawalRepository.findAll();
+    public List<Withdrawal> getAllWithdrawal(@RequestHeader("Authorization") String token) {
+        Claims claims = withdrawalService.getClaims(token);
+        if (claims.get("rol").equals("ADMIN"))
+            return withdrawalService.getWithdrawalRepository().findAll();
+        return withdrawalService.getWithdrawalRepository().findByWalletNumber(claims.getSubject());
     }
 
+    @TokenAuth(auth_role = "USER", account_type = "driver,restaurant")
     @PostMapping
-    public ResponseEntity<Withdrawal> requestWithdrawal(@RequestBody Withdrawal wd) {
-        int res = this.withdrawalService.isValid(wd);
+    public ResponseEntity<Withdrawal> requestWithdrawal(@RequestBody Withdrawal wd,
+                                                        @RequestHeader("Authorization") String token) {
+        Claims claims = withdrawalService.getClaims(token);
+        wd.setWalletNumber(claims.getSubject());
+        this.withdrawalService.isValid(wd);
 
-        if (res == -1)
-            throw new BadRequestException("Some or all fields are empty");
-        else if (res == -2)
-            throw new NotFoundException("Wallet Number for this withdrawal is non-existent");
-        else if (res == -3)
-            throw new BadRequestException("Wallet Balance is insufficient to complete withdrawal");
-        else if (res == -4)
-            throw new BadRequestException("Balance withdrawal is exclusive for driver and restaurant wallet only");
-
-        Wallet w = this.walletRepository.findByWalletNumber(wd.getWalletNumber());
+        Wallet w = withdrawalService.getWalletRepository().findByWalletNumber(wd.getWalletNumber());
         w.setBalance(w.getBalance()-wd.getAmount());
 
-        this.withdrawalRepository.insert(wd);
-        this.walletRepository.save(w);
+        withdrawalService.getWithdrawalRepository().insert(wd);
+        withdrawalService.getWalletRepository().save(w);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Location", WithdrawalController.BASE_URL + "/" + wd.getTransactionId());
         return new ResponseEntity<>(wd, headers, HttpStatus.CREATED);
     }
 
+    @TokenAuth
     @GetMapping("/{withdrawalId}")
-    public Withdrawal getWithdrawal(@PathVariable("withdrawalId") String withdrawalId) {
-        Withdrawal wd = this.withdrawalRepository.findByTransactionId(withdrawalId);
+    public Withdrawal getWithdrawalDetail(@PathVariable("withdrawalId") String withdrawalId) {
+        Withdrawal wd = withdrawalService.getWithdrawalRepository().findByTransactionId(withdrawalId);
 
         if (wd == null)
             throw new NotFoundException("Withdrawal with ID " + withdrawalId + " is non-existent");
@@ -69,9 +66,10 @@ public class WithdrawalController {
         return wd;
     }
 
+    @TokenAuth
     @PatchMapping("/confirm/{withdrawalId}")
     public Withdrawal confirmWithdrawal(@PathVariable("withdrawalId") String withdrawalId) {
-        Withdrawal wd = this.withdrawalRepository.findByTransactionId(withdrawalId);
+        Withdrawal wd = withdrawalService.getWithdrawalRepository().findByTransactionId(withdrawalId);
 
         if (wd == null)
             throw new NotFoundException("Withdrawal with ID " + withdrawalId + " is non-existent");
@@ -79,19 +77,20 @@ public class WithdrawalController {
         if (!this.withdrawalService.isPending(wd))
             throw new BadRequestException("Withdrawal with ID " + withdrawalId + " is already confirmed/canceled");
 
-        Wallet w = this.walletRepository.findByWalletNumber(wd.getWalletNumber());
+        Wallet w = withdrawalService.getWalletRepository().findByWalletNumber(wd.getWalletNumber());
         w.setBalance(w.getBalance()-wd.getAmount());
         wd.setStatus("confirmed");
 
-        this.walletRepository.save(w);
-        this.withdrawalRepository.save(wd);
+        withdrawalService.getWalletRepository().save(w);
+        withdrawalService.getWithdrawalRepository().save(wd);
 
         return wd;
     }
 
+    @TokenAuth
     @PatchMapping("/cancel/{withdrawalId}")
     public Withdrawal canceledWithdrawal(@PathVariable("withdrawalId") String withdrawalId) {
-        Withdrawal wd = this.withdrawalRepository.findByTransactionId(withdrawalId);
+        Withdrawal wd = withdrawalService.getWithdrawalRepository().findByTransactionId(withdrawalId);
 
         if (wd == null)
             throw new NotFoundException("Withdrawal with ID " + withdrawalId + " is non-existent");
@@ -99,12 +98,12 @@ public class WithdrawalController {
         if (!this.withdrawalService.isPending(wd))
             throw new BadRequestException("Withdrawal with ID " + withdrawalId + " is already confirmed/canceled");
 
-        Wallet w = this.walletRepository.findByWalletNumber(wd.getWalletNumber());
+        Wallet w = withdrawalService.getWalletRepository().findByWalletNumber(wd.getWalletNumber());
         w.setBalance(w.getBalance() + wd.getAmount()); // refund wallet balance
         wd.setStatus("canceled");
 
-        this.withdrawalRepository.save(wd);
-        this.walletRepository.save(w);
+        withdrawalService.getWithdrawalRepository().save(wd);
+        withdrawalService.getWalletRepository().save(w);
 
         return wd;
     }

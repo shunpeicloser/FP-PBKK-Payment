@@ -36,6 +36,10 @@ public class Withdrawal extends Transaction{
         return walletNumber;
     }
 
+    public void setWalletNumber(String walletNumber) {
+        this.walletNumber = walletNumber;
+    }
+
     public int getAmount() {
         return amount;
     }

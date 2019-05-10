@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface WithdrawalRepository extends MongoRepository<Withdrawal, String> {
+    List<Withdrawal> findByWalletNumber(String walletNumber);
     Withdrawal findByTransactionId(String withdrawalId);
 
     @Override
