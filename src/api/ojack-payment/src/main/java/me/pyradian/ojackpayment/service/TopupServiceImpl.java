@@ -1,7 +1,11 @@
 package me.pyradian.ojackpayment.service;
 
+import io.jsonwebtoken.Claims;
+import me.pyradian.ojackpayment.exception.BadRequestException;
+import me.pyradian.ojackpayment.exception.NotFoundException;
 import me.pyradian.ojackpayment.model.Topup;
 import me.pyradian.ojackpayment.model.Wallet;
+import me.pyradian.ojackpayment.repository.TopupRepository;
 import me.pyradian.ojackpayment.repository.WalletRepository;
 import org.springframework.stereotype.Service;
 
@@ -9,21 +13,32 @@ import org.springframework.stereotype.Service;
 public class TopupServiceImpl implements TopupService{
 
     private WalletRepository walletRepository;
+    private TopupRepository topupRepository;
+    private JwtService jwtService;
 
-    public TopupServiceImpl(WalletRepository walletRepository) {
+    public TopupServiceImpl(WalletRepository walletRepository,
+                            TopupRepository topupRepository,
+                            JwtService jwtService) {
         this.walletRepository = walletRepository;
+        this.topupRepository = topupRepository;
+        this.jwtService = jwtService;
+    }
+
+    public WalletRepository getWalletRepository() {
+        return this.walletRepository;
+    }
+
+    public TopupRepository getTopupRepository() {
+        return this.topupRepository;
+    }
+
+    public Claims getClaims(String token) {
+        return this.jwtService.getBody(token);
     }
 
     public int isValid(Topup t) {
-        if ( t.getTopupBalance() <= 0 || t.getWalletNumber() == null)
-            return -1;
-        else if (this.walletRepository.findByWalletNumber(t.getWalletNumber()) == null)
-            return -2;
-        else if (t.getTopupBalance() <= 25000)
-            return -3;
-        // only valid for customer
-        else if (!checkWalletType(t))
-            return -4;
+        if (t.getTopupBalance() <= 25000)
+            throw new BadRequestException("Minimum topup balance is 25000");
 
         return 0;
     }

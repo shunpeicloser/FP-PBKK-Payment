@@ -29,6 +29,10 @@ public class Topup extends Transaction {
         return walletNumber;
     }
 
+    public void setWalletNumber(String walletNumber) {
+        this.walletNumber = walletNumber;
+    }
+
     @JsonProperty("topup_balance")
     public int getTopupBalance() {
         return topupBalance;
