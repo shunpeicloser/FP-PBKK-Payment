@@ -1,5 +1,6 @@
 package me.pyradian.ojackpayment.service;
 
+import io.jsonwebtoken.Claims;
 import me.pyradian.ojackpayment.model.Wallet;
 import me.pyradian.ojackpayment.repository.WalletRepository;
 import org.springframework.stereotype.Service;
@@ -8,9 +9,11 @@ import org.springframework.stereotype.Service;
 public class WalletServiceImpl implements WalletService {
 
     private WalletRepository walletRepository;
+    private JwtService jwtService;
 
-    public WalletServiceImpl(WalletRepository walletRepository) {
+    public WalletServiceImpl(WalletRepository walletRepository, JwtService jwtService) {
         this.walletRepository = walletRepository;
+        this.jwtService = jwtService;
     }
 
     public int isValidWallet(Wallet w) {
@@ -28,6 +31,14 @@ public class WalletServiceImpl implements WalletService {
             return -3;
 
         return 0;
+    }
+
+    public WalletRepository repository() {
+        return this.walletRepository;
+    }
+
+    public Claims getClaims(String token) {
+        return jwtService.getBody(token);
     }
 
     private boolean validType(String type) {

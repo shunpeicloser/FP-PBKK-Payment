@@ -3,6 +3,8 @@ package me.pyradian.ojackpayment.controller;
 import com.mongodb.lang.Nullable;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import io.jsonwebtoken.Claims;
+import me.pyradian.ojackpayment.aop.TokenAuth;
 import me.pyradian.ojackpayment.exception.BadRequestException;
 import me.pyradian.ojackpayment.exception.ConflictException;
 import me.pyradian.ojackpayment.exception.NotFoundException;
@@ -22,36 +24,45 @@ import java.util.List;
 public class WalletController {
     public static final String BASE_URL = "/api/v1/wallet";
 
-    private WalletRepository walletRepository;
     private WalletService walletService;
 
     public WalletController(WalletRepository walletRepository, WalletService walletService) {
-        this.walletRepository = walletRepository;
         this.walletService = walletService;
     }
 
+    @TokenAuth(strict = false)
     @GetMapping
-    public List<Wallet> getAllWallet(@Nullable @RequestParam("type") String type,
-                                     @Nullable @RequestParam("balance_range") String balanceRange) {
-        QWallet wallet = new QWallet("wallet");
-        BooleanBuilder builder = new BooleanBuilder();
-        if (type != null)
-            builder.and(wallet.type.eq(type));
-        if (balanceRange != null) {
-            int low, high;
-            String[] val = balanceRange.split(",");
-            System.out.println(val[0] + " " + val[1]);
-            val[0] = (val[0].equals(""))? "0": val[0];
-            val[1] = (val[0].equals(""))? "9999999999": val[1];
-            low = Integer.parseInt(val[0]);
-            high = Integer.parseInt(val[1]);
-            builder.and(wallet.balance.between(low, high));
+    public Object getAllWallet(@Nullable @RequestParam("type") String type,
+                                     @Nullable @RequestParam("balance_range") String balanceRange,
+                                     @RequestHeader("Authorization") String token) {
+        Claims claims = walletService.getClaims(token);
+
+        // for admin
+        if (claims.get("rol").equals("ADMIN")) {
+            QWallet wallet = new QWallet("wallet");
+            BooleanBuilder builder = new BooleanBuilder();
+            if (type != null)
+                builder.and(wallet.type.eq(type));
+            if (balanceRange != null) {
+                int low, high;
+                String[] val = balanceRange.split(",");
+                System.out.println(val[0] + " " + val[1]);
+                val[0] = (val[0].equals("")) ? "0" : val[0];
+                val[1] = (val[0].equals("")) ? "9999999999" : val[1];
+                low = Integer.parseInt(val[0]);
+                high = Integer.parseInt(val[1]);
+                builder.and(wallet.balance.between(low, high));
+            }
+
+            return (builder.getValue() == null ? walletService.repository().findAll() :
+                    (List<Wallet>) walletService.repository().findAll(builder.getValue()));
         }
 
-        return (builder.getValue() == null? this.walletRepository.findAll():
-                (List<Wallet>) this.walletRepository.findAll(builder.getValue()));
+        Wallet w = walletService.repository().findByWalletNumber(claims.getSubject());
+        return w;
     }
 
+    @TokenAuth
     @PostMapping
     public ResponseEntity<Wallet> createWallet(@RequestBody Wallet w) {
         int res = this.walletService.isValidWallet(w);
@@ -65,13 +76,14 @@ public class WalletController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Location", WalletController.BASE_URL + "/" + w.getWalletNumber());
-        this.walletRepository.insert(w);
+        walletService.repository().insert(w);
         return new ResponseEntity<>(w, headers, HttpStatus.CREATED);
     }
 
+    @TokenAuth
     @GetMapping("/{walletNumber}")
     public Wallet getWallet(@PathVariable("walletNumber") String walletNumber) {
-        Wallet w = this.walletRepository.findByWalletNumber(walletNumber);
+        Wallet w = walletService.repository().findByWalletNumber(walletNumber);
 
         if (w == null)
             throw new NotFoundException("Wallet number " + walletNumber + " is non-existent");
