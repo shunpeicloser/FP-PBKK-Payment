@@ -1,0 +1,66 @@
+# OJack Payment API Test Checklist
+---
+## Wallet (/api/v1/wallet)
+- Create Wallet ( / POST )
+  - Only ADMIN can create new wallet
+- List Wallet ( / GET )
+  - If ADMIN, show all available wallets
+  - If USER, show only the user wallet
+- Show Individual Wallet Detail ( /{walletNumber} GET )
+  - Only ADMIN can view all wallets' detail
+  - If USER, can only it's own wallet
+---
+## Topup (/api/v1/transaction/topup)
+- Request for Topup ( / POST )
+  - Only USER with account type of CUSTOMER can request for wallet topup
+- List Topup Transaction ( / GET )
+  - If ADMIN, show all topup transactions
+  - If USER, show all user's topup transactions
+- Confirming Topup Transaction ( /confirm/{topupId} PATCH )
+  - Only ADMIN can confirm a topup transaction
+  - The transaction SHOULD be confirmed only once
+  - Canceled transaction CANNOT be confirmed
+- Canceling Topup Transaction ( /cancel/{topupId} PATCH )
+  - Only ADMIN can cancel a topup transaction
+  - Confirmed transaction CANNOT be canceled
+---
+## Withdrawal (/api/v1/transaction/withdrawal)
+- Request for Withdrawal ( / POST )
+  - Only USER with account type of driver or restaurant can request for balance withdrawal
+  - Charge driver's or restaurant's wallet based on withdrawal amount
+- List Withdrawal Transaction ( / GET )
+  - If ADMIN, show all withdrawal transactions
+  - If USER, show all user's withdrawal transactions
+- Show Individual Withdrawal Transaction ( /{withdrawalId} GET )
+  - ADMIN can see all individual transaction
+  - USER can only see user's individual transaction
+- Confirming Withdrawal Transaction ( /confirm/{withdrawalId} PATCH )
+  - Only ADMIN can confirm withdrawal transaction
+  - The transaction SHOULD be confirmed only once
+  - Canceled transaction CANNOT be confirmed
+- Canceling Withdrawal Transaction ( /cancel/{withdrawalId} PATCH )
+  - Only ADMIN can cancel a withdrawal transaction
+  - Confirmed transaction CANNOT be canceled
+  - Refund withdrawal amount to wallet
+---
+## Food Order (/api/v1/transaction/foodorder)
+- Making a Food Order ( / POST )
+  - Only ADMIN can make the transaction
+  - Make sure all wallets attached in the transaction (customer, driver, restaurant) exist
+  - Make sure the bill and balance share (for driver and restaurant) match
+  - Charge customer's wallet based on order bill
+- List Food Order Transaction ( / GET )
+  - If ADMIN, show all food order transactions
+  - If USER, show all user's food order transactions
+- Show Individual Food Order Detail ( /{foodOrderId} GET )
+  - If ADMIN, can view all transactions' detail
+  - If USER, can only view the transaction if user's wallet number is attached in the order (as customer, driver, or restaurant)
+- Confirming Food Order Transaction ( /confirm/{foodOrderId} PATCH )
+  - Only USER with account type of driver and is attached in the order can confirm the order
+  - The transaction SHOULD be confirmed only once
+  - Canceled transaction CANNOT be confirmed
+  - Add balance based on wallet share to driver's and restaurant's wallet
+- Canceling Food Order Transaction ( /cancel/{foodOrderId} PATCH )
+  - Only USER with account type of restaurant or customer and is attached in the order can cancel the order
+  - Confirmed transaction CANNOT be canceled
+  - Refund order bill to customer's wallet
