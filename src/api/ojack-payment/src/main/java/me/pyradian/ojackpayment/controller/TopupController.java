@@ -2,13 +2,10 @@ package me.pyradian.ojackpayment.controller;
 
 import io.jsonwebtoken.Claims;
 import me.pyradian.ojackpayment.aop.TokenAuth;
-import me.pyradian.ojackpayment.exception.BadRequestException;
 import me.pyradian.ojackpayment.exception.ConflictException;
 import me.pyradian.ojackpayment.exception.NotFoundException;
 import me.pyradian.ojackpayment.model.Topup;
 import me.pyradian.ojackpayment.model.Wallet;
-import me.pyradian.ojackpayment.repository.TopupRepository;
-import me.pyradian.ojackpayment.repository.WalletRepository;
 import me.pyradian.ojackpayment.service.TopupService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

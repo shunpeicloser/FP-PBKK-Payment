@@ -10,7 +10,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Aspect
 @Component
@@ -28,7 +27,9 @@ public class TokenAuthAspect {
         HttpServletRequest request = requestAttributes.getRequest();
 
         String authHeader = request.getHeader("Authorization");
-//        System.out.println(authHeader);
+        System.out.println(authHeader);
+        if (authHeader == null)
+            throw new UnauthorizedException("Token required. Make sure 'Authorization' key is in request header");
         Claims claims = jwtService.getBody(authHeader);
 
         // if not strict, ADMIN and USER can have the access

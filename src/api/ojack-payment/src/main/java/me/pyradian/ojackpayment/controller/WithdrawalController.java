@@ -6,8 +6,6 @@ import me.pyradian.ojackpayment.exception.BadRequestException;
 import me.pyradian.ojackpayment.exception.NotFoundException;
 import me.pyradian.ojackpayment.model.Wallet;
 import me.pyradian.ojackpayment.model.Withdrawal;
-import me.pyradian.ojackpayment.repository.WalletRepository;
-import me.pyradian.ojackpayment.repository.WithdrawalRepository;
 import me.pyradian.ojackpayment.service.WithdrawalService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

@@ -7,8 +7,6 @@ import me.pyradian.ojackpayment.exception.NotFoundException;
 import me.pyradian.ojackpayment.exception.UnauthorizedException;
 import me.pyradian.ojackpayment.model.FoodOrder;
 import me.pyradian.ojackpayment.model.Wallet;
-import me.pyradian.ojackpayment.repository.FoodOrderRepository;
-import me.pyradian.ojackpayment.repository.WalletRepository;
 import me.pyradian.ojackpayment.service.FoodOrderService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

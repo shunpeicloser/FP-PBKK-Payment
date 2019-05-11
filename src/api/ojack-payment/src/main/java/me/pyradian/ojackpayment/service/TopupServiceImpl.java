@@ -2,7 +2,6 @@ package me.pyradian.ojackpayment.service;
 
 import io.jsonwebtoken.Claims;
 import me.pyradian.ojackpayment.exception.BadRequestException;
-import me.pyradian.ojackpayment.exception.NotFoundException;
 import me.pyradian.ojackpayment.model.Topup;
 import me.pyradian.ojackpayment.model.Wallet;
 import me.pyradian.ojackpayment.repository.TopupRepository;
