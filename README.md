@@ -26,4 +26,88 @@ Claims Description:
 - rol   : ADMIN or USER. ADMIN token is used for service-to-service, while USER is for user-to-service.
 - atp   : This only valids for USER token, its possible value is 'customer', 'driver', or 'restaurant'.
 ```
-**NOTE**: The authorization above is (currently) only valid for this service only. We're waiting for group 'Customer' to design their JWT structure, secret key, and everything else.
+**NOTE**: The authorization above is (currently) only valid for this service. We're waiting for group 'Customer' to design their JWT structure, secret key, and everything else.
+
+---
+## API Resources and Operations
+### Wallet Resource
+This resource handles 'Wallet' entity.
+#### Operations
+- Create Wallet:
+  - Method  : **POST**
+  - Role    : **ADMIN**
+  - URL     : **/api/v1/wallet**
+  - Request Example:
+    ```
+    Request Body:
+    {
+	    "wallet_number": "6288804862379",
+	    "type": "customer"
+    }
+    
+    Description:
+    - wallet_number : Phone number of registered user
+    - type          : Type of wallet => ['customer', 'driver', 'restaurant']
+    ```
+  - Response Example:
+    ```
+    {
+      "id": "5cd6dc041a40fc6cb0936243",
+      "balance": 0,
+      "type": "customer",
+      "created_date": "2019-05-11T14:28:20.069+0000",
+      "last_modified_date": "2019-05-11T14:28:20.069+0000",
+      "wallet_number": "6288804862379"
+    }
+    ```
+  ---
+- List Wallet
+  - Method  : **GET**
+  - Role    : **ADMIN**,**USER**
+  - URL     : **/api/v1/wallet**
+  - Request Example: None
+  - Response Example:
+  ```
+  [
+    {
+      "id": "5cd6d3611a40fc6cb0936242",
+      "balance": 0,
+      "type": "restaurant",
+      "created_date": "2019-05-11T13:51:29.048+0000",
+      "last_modified_date": "2019-05-11T13:51:29.048+0000",
+      "wallet_number": "6288804862378"
+    },
+    {
+      "id": "5cd6dc041a40fc6cb0936243",
+      "balance": 0,
+      "type": "customer",
+      "created_date": "2019-05-11T14:28:20.069+0000",
+      "last_modified_date": "2019-05-11T14:28:20.069+0000",
+      "wallet_number": "6288804862379"
+    }
+  ]
+  ```
+  - Note: **For USER token, the response would be single wallet that correponds to wallet number of the token.**
+  ---
+- Show Individual Wallet Detail
+  - Method  : **GET**
+  - Role    : **ADMIN**,**USER**
+  - URL     : **/api/v1/wallet/{walletNumber}**
+  - Request Example:
+  ```
+  Request URL: /api/v1/wallet/6288804862378
+  Body: None
+  ```
+  - Response Example:
+  ```
+  {
+    "id": "5cd6d3611a40fc6cb0936242",
+    "balance": 0,
+    "type": "restaurant",
+    "created_date": "2019-05-11T13:51:29.048+0000",
+    "last_modified_date": "2019-05-11T13:51:29.048+0000",
+    "wallet_number": "6288804862378"
+  }
+  ```
+  - Note: **ADMIN can see all details of registered wallets. USER can only see their own wallet detail**
+---
