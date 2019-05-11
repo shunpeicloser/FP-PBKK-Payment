@@ -34,7 +34,7 @@ Claims Description:
 ```
 **NOTE**: The authorization above is (currently) only valid for this service. We're waiting for 'Customer' group to design their JWT structure, secret key, and everything else.  
 
-**You can take a look at sample tokens we made to make things easier for us. You can copy it [HERE](sample_token.md)**
+**You can take a look at sample tokens we've made to make things easier for us. You can copy it [HERE](sample_token.md)**
 
 ---
 ## API Resources and Operations
