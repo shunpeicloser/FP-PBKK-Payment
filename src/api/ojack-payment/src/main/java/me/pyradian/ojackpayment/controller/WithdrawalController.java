@@ -55,11 +55,14 @@ public class WithdrawalController {
         return new ResponseEntity<>(wd, headers, HttpStatus.CREATED);
     }
 
-    @TokenAuth
+    @TokenAuth(strict = false)
     @GetMapping("/{withdrawalId}")
-    public Withdrawal getWithdrawalDetail(@PathVariable("withdrawalId") String withdrawalId) {
+    public Withdrawal getWithdrawalDetail(@PathVariable("withdrawalId") String withdrawalId,
+                                          @RequestHeader("Authorixation") String token) {
+        Claims claims = withdrawalService.getClaims(token);
         Withdrawal wd = withdrawalService.getWithdrawalRepository().findByTransactionId(withdrawalId);
 
+        // non-existent withdrawal transaction
         if (wd == null)
             throw new NotFoundException("Withdrawal with ID " + withdrawalId + " is non-existent");
 
@@ -77,11 +80,7 @@ public class WithdrawalController {
         if (!this.withdrawalService.isPending(wd))
             throw new BadRequestException("Withdrawal with ID " + withdrawalId + " is already confirmed/canceled");
 
-        Wallet w = withdrawalService.getWalletRepository().findByWalletNumber(wd.getWalletNumber());
-        w.setBalance(w.getBalance()-wd.getAmount());
         wd.setStatus("confirmed");
-
-        withdrawalService.getWalletRepository().save(w);
         withdrawalService.getWithdrawalRepository().save(wd);
 
         return wd;
