@@ -27,6 +27,7 @@
 ## Withdrawal (/api/v1/transaction/withdrawal)
 - Request for Withdrawal ( / POST )
   - Only USER with account type of driver or restaurant can request for balance withdrawal
+  - Charge driver's or restaurant's wallet based on withdrawal amount
 - List Withdrawal Transaction ( / GET )
   - If ADMIN, show all withdrawal transactions
   - If USER, show all user's withdrawal transactions
@@ -40,12 +41,14 @@
 - Canceling Withdrawal Transaction ( /cancel/{withdrawalId} PATCH )
   - Only ADMIN can cancel a withdrawal transaction
   - Confirmed transaction CANNOT be canceled
+  - Refund withdrawal amount to wallet
 ---
 ## Food Order (/api/v1/transaction/foodorder)
 - Making a Food Order ( / POST )
   - Only ADMIN can make the transaction
   - Make sure all wallets attached in the transaction (customer, driver, restaurant) exist
   - Make sure the bill and balance share (for driver and restaurant) match
+  - Charge customer's wallet based on order bill
 - List Food Order Transaction ( / GET )
   - If ADMIN, show all food order transactions
   - If USER, show all user's food order transactions
@@ -56,6 +59,8 @@
   - Only USER with account type of driver and is attached in the order can confirm the order
   - The transaction SHOULD be confirmed only once
   - Canceled transaction CANNOT be confirmed
+  - Add balance based on wallet share to driver's and restaurant's wallet
 - Canceling Food Order Transaction ( /cancel/{foodOrderId} PATCH )
   - Only USER with account type of restaurant or customer and is attached in the order can cancel the order
   - Confirmed transaction CANNOT be canceled
+  - Refund order bill to customer's wallet
