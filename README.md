@@ -4,7 +4,8 @@ Rahadian K Putra      05111640000006
 Taufiq Tirtajiwangga  05111640000016
 Michael J Albertus    05111640000097
 ```
-Proposal: [Link](https://docs.google.com/document/d/1Z2ShZR6lU_8SY8NFg1wXUiJI6F_bhLzSOYUbOmH1NpI/edit?usp=sharing)
+Proposal: [Link](https://docs.google.com/document/d/1Z2ShZR6lU_8SY8NFg1wXUiJI6F_bhLzSOYUbOmH1NpI/edit?usp=sharing)  
+Access the service [***HERE***](https://pyradian.me:9443/) **:D**
 
 ---
 # API Detail
