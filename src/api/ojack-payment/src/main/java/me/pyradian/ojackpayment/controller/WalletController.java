@@ -2,15 +2,12 @@ package me.pyradian.ojackpayment.controller;
 
 import com.mongodb.lang.Nullable;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import io.jsonwebtoken.Claims;
 import me.pyradian.ojackpayment.aop.TokenAuth;
-import me.pyradian.ojackpayment.exception.BadRequestException;
-import me.pyradian.ojackpayment.exception.ConflictException;
 import me.pyradian.ojackpayment.exception.NotFoundException;
+import me.pyradian.ojackpayment.exception.UnauthorizedException;
 import me.pyradian.ojackpayment.model.QWallet;
 import me.pyradian.ojackpayment.model.Wallet;
-import me.pyradian.ojackpayment.repository.WalletRepository;
 import me.pyradian.ojackpayment.service.WalletService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,7 +23,7 @@ public class WalletController {
 
     private WalletService walletService;
 
-    public WalletController(WalletRepository walletRepository, WalletService walletService) {
+    public WalletController(WalletService walletService) {
         this.walletService = walletService;
     }
 
@@ -65,14 +62,7 @@ public class WalletController {
     @TokenAuth
     @PostMapping
     public ResponseEntity<Wallet> createWallet(@RequestBody Wallet w) {
-        int res = this.walletService.isValidWallet(w);
-
-        if (res == -1) // incomplete field
-            throw new BadRequestException("Some or all fields are empty");
-        else if (res == -2) // wallet number already exists
-            throw new ConflictException("Wallet number is already registered");
-        else if (res == -3) // invalid wallet type
-            throw new BadRequestException("Invalid wallet type");
+        this.walletService.isValidWallet(w);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Location", WalletController.BASE_URL + "/" + w.getWalletNumber());
@@ -80,13 +70,24 @@ public class WalletController {
         return new ResponseEntity<>(w, headers, HttpStatus.CREATED);
     }
 
-    @TokenAuth
+    @TokenAuth(strict = false)
     @GetMapping("/{walletNumber}")
-    public Wallet getWalletDetail(@PathVariable("walletNumber") String walletNumber) {
+    public Wallet getWalletDetail(@PathVariable("walletNumber") String walletNumber,
+                                  @RequestHeader("Authorization") String token) {
+        Claims claims = walletService.getClaims(token);
         Wallet w = walletService.repository().findByWalletNumber(walletNumber);
 
+        // non-existent wallet
         if (w == null)
             throw new NotFoundException("Wallet number " + walletNumber + " is non-existent");
+
+        // if admin, always return the wallet detail
+        if (claims.get("rol").equals("ADMIN"))
+            return w;
+
+        // if user, only it's own wallet
+        if (!walletNumber.equals(claims.getSubject()))
+            throw new UnauthorizedException("Cannot view other's wallet's detail");
 
         return w;
     }

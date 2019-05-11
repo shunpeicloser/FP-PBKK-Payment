@@ -1,6 +1,8 @@
 package me.pyradian.ojackpayment.service;
 
 import io.jsonwebtoken.Claims;
+import me.pyradian.ojackpayment.exception.BadRequestException;
+import me.pyradian.ojackpayment.exception.ConflictException;
 import me.pyradian.ojackpayment.model.Wallet;
 import me.pyradian.ojackpayment.repository.WalletRepository;
 import org.springframework.stereotype.Service;
@@ -20,15 +22,15 @@ public class WalletServiceImpl implements WalletService {
 
         // incomplete field
         if (w.getWalletNumber() == null || w.getType() == null || !validType(w.getType()))
-            return -1;
+            throw new BadRequestException("Some or all fields are empty");
 
         // wallet number already exists
         if (this.walletRepository.findByWalletNumber(w.getWalletNumber()) != null)
-            return -2;
+            throw new ConflictException("Wallet number is already registered");
 
         // invalid type
         if (!validType(w.getType()))
-            return -3;
+            throw new BadRequestException("Invalid wallet type");
 
         return 0;
     }
