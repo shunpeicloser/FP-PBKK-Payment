@@ -8,7 +8,7 @@
   - If USER, show only the user wallet
 - Show Individual Wallet Detail ( /{walletNumber} GET )
   - Only ADMIN can view all wallets' detail
-  - This call is synonymous with above call, only valid for admin
+  - If USER, can only it's own wallet
 ---
 ## Topup (/api/v1/transaction/topup)
 - Request for Topup ( / POST )
