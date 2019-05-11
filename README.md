@@ -4,7 +4,8 @@ Rahadian K Putra      05111640000006
 Taufiq Tirtajiwangga  05111640000016
 Michael J Albertus    05111640000097
 ```
-Proposal: [Link](https://docs.google.com/document/d/1Z2ShZR6lU_8SY8NFg1wXUiJI6F_bhLzSOYUbOmH1NpI/edit?usp=sharing)
+Proposal: [Link](https://docs.google.com/document/d/1Z2ShZR6lU_8SY8NFg1wXUiJI6F_bhLzSOYUbOmH1NpI/edit?usp=sharing)  
+Access the service [***HERE***](https://pyradian.me:9443/) **:D**
 
 ---
 # API Detail
@@ -34,7 +35,7 @@ Claims Description:
 ```
 **NOTE**: The authorization above is (currently) only valid for this service. We're waiting for 'Customer' group to design their JWT structure, secret key, and everything else.  
 
-**You can take a look at sample tokens we made to make things easier for us. You can copy it [HERE](sample_token.md)**
+**You can take a look at sample tokens we've made to make things easier for us. You can copy it [HERE](sample_token.md)**
 
 ---
 ## API Resources and Operations
