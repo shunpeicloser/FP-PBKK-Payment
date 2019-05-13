@@ -1,6 +1,7 @@
 package me.pyradian.ojackpayment.controller;
 
 import io.jsonwebtoken.Claims;
+import me.pyradian.ojackpayment.aop.JwtToken;
 import me.pyradian.ojackpayment.aop.TokenAuth;
 import me.pyradian.ojackpayment.exception.BadRequestException;
 import me.pyradian.ojackpayment.exception.NotFoundException;
@@ -28,7 +29,7 @@ public class FoodOrderController {
 
     @TokenAuth(strict = false)
     @GetMapping
-    public List<FoodOrder> getAllFoodOrder(@RequestHeader("Authorization") String token) {
+    public List<FoodOrder> getAllFoodOrder(@JwtToken String token) {
         Claims claims = foodOrderService.getClaims(token);
 
         if (claims.get("rol").equals("ADMIN"))
@@ -56,7 +57,7 @@ public class FoodOrderController {
     @TokenAuth(strict = false)
     @GetMapping("/{foodOrderId}")
     public FoodOrder getFoodOrder(@PathVariable("foodOrderId") String foodOrderId,
-                                  @RequestHeader("Authorization") String token) {
+                                  @JwtToken String token) {
         Claims claims = foodOrderService.getClaims(token);
 
         FoodOrder fo = foodOrderService.getFoodOrderRepository().findByTransactionId(foodOrderId);
@@ -77,7 +78,7 @@ public class FoodOrderController {
     @TokenAuth(auth_role = "USER", account_type = "driver")
     @PatchMapping("/confirm/{foodOrderId}")
     public FoodOrder confirmFoodOrder(@PathVariable("foodOrderId") String foodOrderId,
-                                      @RequestHeader("Authorization") String token) {
+                                      @JwtToken String token) {
         Claims claims = foodOrderService.getClaims(token);
         FoodOrder fo = foodOrderService.getFoodOrderRepository().findByTransactionId(foodOrderId);
 

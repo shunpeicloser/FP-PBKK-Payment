@@ -1,6 +1,7 @@
 package me.pyradian.ojackpayment.controller;
 
 import io.jsonwebtoken.Claims;
+import me.pyradian.ojackpayment.aop.JwtToken;
 import me.pyradian.ojackpayment.aop.TokenAuth;
 import me.pyradian.ojackpayment.exception.BadRequestException;
 import me.pyradian.ojackpayment.exception.NotFoundException;
@@ -27,7 +28,7 @@ public class WithdrawalController {
 
     @TokenAuth(strict = false)
     @GetMapping
-    public List<Withdrawal> getAllWithdrawal(@RequestHeader("Authorization") String token) {
+    public List<Withdrawal> getAllWithdrawal(@JwtToken String token) {
         Claims claims = withdrawalService.getClaims(token);
         if (claims.get("rol").equals("ADMIN"))
             return withdrawalService.getWithdrawalRepository().findAll();
@@ -37,7 +38,7 @@ public class WithdrawalController {
     @TokenAuth(auth_role = "USER", account_type = "driver,restaurant")
     @PostMapping
     public ResponseEntity<Withdrawal> requestWithdrawal(@RequestBody Withdrawal wd,
-                                                        @RequestHeader("Authorization") String token) {
+                                                        @JwtToken String token) {
         Claims claims = withdrawalService.getClaims(token);
         wd.setWalletNumber(claims.getSubject());
         this.withdrawalService.isValid(wd);
@@ -56,7 +57,7 @@ public class WithdrawalController {
     @TokenAuth(strict = false)
     @GetMapping("/{withdrawalId}")
     public Withdrawal getWithdrawalDetail(@PathVariable("withdrawalId") String withdrawalId,
-                                          @RequestHeader("Authorixation") String token) {
+                                          @JwtToken String token) {
         Claims claims = withdrawalService.getClaims(token);
         Withdrawal wd = withdrawalService.getWithdrawalRepository().findByTransactionId(withdrawalId);
 

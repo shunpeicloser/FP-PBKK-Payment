@@ -3,6 +3,7 @@ package me.pyradian.ojackpayment.controller;
 import com.mongodb.lang.Nullable;
 import com.querydsl.core.BooleanBuilder;
 import io.jsonwebtoken.Claims;
+import me.pyradian.ojackpayment.aop.JwtToken;
 import me.pyradian.ojackpayment.aop.TokenAuth;
 import me.pyradian.ojackpayment.exception.NotFoundException;
 import me.pyradian.ojackpayment.exception.UnauthorizedException;
@@ -30,8 +31,8 @@ public class WalletController {
     @TokenAuth(strict = false)
     @GetMapping
     public Object getWallet(@Nullable @RequestParam("type") String type,
-                                     @Nullable @RequestParam("balance_range") String balanceRange,
-                                     @RequestHeader("Authorization") String token) {
+                            @Nullable @RequestParam("balance_range") String balanceRange,
+                            @JwtToken String token) {
         Claims claims = walletService.getClaims(token);
 
         // for admin
@@ -73,7 +74,7 @@ public class WalletController {
     @TokenAuth(strict = false)
     @GetMapping("/{walletNumber}")
     public Wallet getWalletDetail(@PathVariable("walletNumber") String walletNumber,
-                                  @RequestHeader("Authorization") String token) {
+                                  @JwtToken String token) {
         Claims claims = walletService.getClaims(token);
         Wallet w = walletService.repository().findByWalletNumber(walletNumber);
 

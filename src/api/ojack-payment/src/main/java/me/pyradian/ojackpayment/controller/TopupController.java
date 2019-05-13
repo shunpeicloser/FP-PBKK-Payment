@@ -1,6 +1,7 @@
 package me.pyradian.ojackpayment.controller;
 
 import io.jsonwebtoken.Claims;
+import me.pyradian.ojackpayment.aop.JwtToken;
 import me.pyradian.ojackpayment.aop.TokenAuth;
 import me.pyradian.ojackpayment.exception.ConflictException;
 import me.pyradian.ojackpayment.exception.NotFoundException;
@@ -28,7 +29,7 @@ public class TopupController {
 
     @TokenAuth(strict = false)
     @GetMapping
-    public List<Topup> getAllTopup(@RequestHeader("Authorization") String token) {
+    public List<Topup> getAllTopup(@JwtToken String token) {
         Claims claims = this.topupService.getClaims(token);
 
         // if admin, show all topup transactions
@@ -41,7 +42,7 @@ public class TopupController {
     @TokenAuth(auth_role = "USER", account_type = "customer")
     @PostMapping
     public ResponseEntity<Topup> requestTopup(@RequestBody Topup t,
-                                              @RequestHeader("Authorization") String token) {
+                                              @JwtToken String token) {
         Claims claims = topupService.getClaims(token);
         this.topupService.isValid(t);
 
