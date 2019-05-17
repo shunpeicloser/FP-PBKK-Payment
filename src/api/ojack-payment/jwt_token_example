@@ -1,0 +1,13 @@
+alg: HS512
+secret_key: EmYTCuhxT3$FpXUVXDj*f0e4LbcpDAk^apes1eAuUtUrC3V%1XPSGD^2KPj*u^L&
+
+Example:
+- ADMIN
+    token: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJST09UIiwibmFtZSI6IlJPT1QiLCJyb2wiOiJBRE1JTiIsImF0cCI6InJvb3QifQ.J-5dj82Gl_bFGI44ADqrx4SMKIsR9QXgCtgV7G9f8inla-IKpswv4arGsGR3kWaMvNdtedGwcZGjMQ3aY48dLg
+- USER
+    - "atp": "driver"
+        token: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2Mjg4ODA0ODYyMzc3IiwibmFtZSI6IlVzZXIgYWNjb3VudCIsInJvbCI6IlVTRVIiLCJhdHAiOiJkcml2ZXIifQ.0DJP85cgaovX_ldMJfe-bwDbzt_ZWvZgEtdKutm-vLE7big1YUlGFLW4p4U19k9gnXwE1Tua6rD5bMirRVaftQ
+    - "atp": "customer"
+        token: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2Mjg4ODA0ODYyMzc2IiwibmFtZSI6IlVzZXIgYWNjb3VudCIsInJvbCI6IlVTRVIiLCJhdHAiOiJjdXN0b21lciJ9.ulxQiGUCBM7w8ZJjAaRds3Zd8lIjwggQc0fWLFS5uzjI6w7XEX_-JCuBjHoDDhwCBUGBYPAepi5duPpgd93ngQ
+    - "atp": "restaurant"
+        token: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2Mjg4ODA0ODYyMzc4IiwibmFtZSI6IlVzZXIgYWNjb3VudCIsInJvbCI6IlVTRVIiLCJhdHAiOiJyZXN0YXVyYW50In0.0X5Q110br7kalCEHyXFzoVWoxYqvEei5Q9xbPG_uwr7d0UVdkAWlwqlKZehLK_kQvC27vcYV0j8dzNCJGn04Wg

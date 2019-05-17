@@ -1,36 +1,39 @@
 package me.pyradian.ojackpayment.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class BaseEntity {
     @Id
     private String id;
     @CreatedDate
-    private Date createdDate;
+    private LocalDateTime createdDate;
     @LastModifiedDate
-    private Date lastModifiedDate;
+    private LocalDateTime lastModifiedDate;
 
     public String getId() {
         return id;
     }
 
-    public Date getCreatedDate() {
+    @JsonProperty("created_date")
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
+//    public void setCreatedDate(Date createdDate) {
+//        this.createdDate = createdDate;
+//    }
 
-    public Date getLastModifiedDate() {
+    @JsonProperty("last_modified_date")
+    public LocalDateTime getLastModifiedDate() {
         return lastModifiedDate;
     }
 
-    public void setLastModifiedDate(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
+//    public void setLastModifiedDate(Date lastModifiedDate) {
+//        this.lastModifiedDate = lastModifiedDate;
+//    }
 }

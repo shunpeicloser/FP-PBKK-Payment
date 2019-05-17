@@ -9,6 +9,8 @@ import java.util.List;
 
 @Repository
 public interface FoodOrderRepository extends MongoRepository<FoodOrder, String> {
+    @Query(value = "{'wallets.customer.walletNumber': ?0}")
+    List<FoodOrder> findByCustomerWalletNumber(String walletNumber);
     FoodOrder findByTransactionId(String foodOrderId);
 
     @Override

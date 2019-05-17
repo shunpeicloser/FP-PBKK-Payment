@@ -1,5 +1,6 @@
 package me.pyradian.ojackpayment.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.querydsl.core.annotations.QueryEntity;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -23,6 +24,7 @@ public class Wallet extends BaseEntity{
     }
 
 
+    @JsonProperty("wallet_number")
     public String getWalletNumber() {
         return walletNumber;
     }

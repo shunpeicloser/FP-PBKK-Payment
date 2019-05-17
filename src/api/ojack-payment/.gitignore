@@ -27,3 +27,9 @@ HELP.md
 
 ### VS Code ###
 .vscode/
+
+### keystore ###
+/src/main/resources/keystore/
+
+### application.properties ###
+/src/main/resources/application.properties

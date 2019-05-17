@@ -1,7 +1,10 @@
 package me.pyradian.ojackpayment.service;
 
+import io.jsonwebtoken.Claims;
+import me.pyradian.ojackpayment.exception.BadRequestException;
 import me.pyradian.ojackpayment.model.FoodOrder;
 import me.pyradian.ojackpayment.model.Wallet;
+import me.pyradian.ojackpayment.repository.FoodOrderRepository;
 import me.pyradian.ojackpayment.repository.WalletRepository;
 import org.springframework.stereotype.Service;
 
@@ -9,24 +12,52 @@ import org.springframework.stereotype.Service;
 public class FoodOrderServiceImpl implements FoodOrderService {
 
     private WalletRepository walletRepository;
+    private FoodOrderRepository foodOrderRepository;
+    private JwtService jwtService;
 
-    public FoodOrderServiceImpl(WalletRepository walletRepository) {
+    public FoodOrderServiceImpl(WalletRepository walletRepository,
+                                FoodOrderRepository foodOrderRepository,
+                                JwtService jwtService) {
         this. walletRepository = walletRepository;
+        this.foodOrderRepository = foodOrderRepository;
+        this.jwtService = jwtService;
+    }
+
+    @Override
+    public WalletRepository getWalletRepository() {
+        return walletRepository;
+    }
+
+    @Override
+    public FoodOrderRepository getFoodOrderRepository() {
+        return foodOrderRepository;
+    }
+
+    @Override
+    public Claims getClaims(String token) {
+        return jwtService.getBody(token);
+    }
+
+    @Override
+    public boolean canCheckOrder(FoodOrder fo, String walletNumber) {
+        return walletNumber.equals(fo.getCustomerWalletNumber()) ||
+                walletNumber.equals(fo.getDriverWalletNumber()) ||
+                walletNumber.equals(fo.getRestaurantWalletNumber());
     }
 
     public int isValid(FoodOrder fo) {
         // incomplete fields
         if (fo.getFoodOrderBill() == 0 || fo.getFoodOrderWallets() == null)
-            return -1;
+            throw new BadRequestException("Some or all fields are empty");
         // invalid bill
         else if (fo.getFoodOrderBill() <= 0)
-            return -2;
+            throw new BadRequestException("Invalid bill received. Must be > 0");
         // missing wallet number or share amount
         else if(!checkWallet(fo))
-            return -3;
+            throw new BadRequestException("Some or all wallets credential are missing");
         // customer balance is insufficient
         else if(!checkCustomerBalance(fo))
-            return -4;
+            throw new BadRequestException("Customer wallet balance is insufficient to complete the order");
 
         return 0;
     }
