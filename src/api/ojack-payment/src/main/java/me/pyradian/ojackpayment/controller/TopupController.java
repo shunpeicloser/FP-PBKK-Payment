@@ -5,6 +5,7 @@ import me.pyradian.ojackpayment.aop.JwtToken;
 import me.pyradian.ojackpayment.aop.TokenAuth;
 import me.pyradian.ojackpayment.exception.ConflictException;
 import me.pyradian.ojackpayment.exception.NotFoundException;
+import me.pyradian.ojackpayment.exception.UnauthorizedException;
 import me.pyradian.ojackpayment.model.Topup;
 import me.pyradian.ojackpayment.model.Wallet;
 import me.pyradian.ojackpayment.service.TopupService;
@@ -39,6 +40,25 @@ public class TopupController {
         return topupService.getTopupRepository().findByWalletNumber(claims.getSubject());
     }
 
+    @TokenAuth(strict = false)
+    @GetMapping("/{topupId}")
+    public Topup getTopupDetail(@PathVariable("topupId") String topupId,
+                                @JwtToken String token) {
+        Claims claims = topupService.getClaims(token);
+
+        Topup t = topupService.getTopupRepository().findByTransactionId(topupId);
+
+        // admin can view all topup
+        if (claims.get("rol").equals("ADMIN"))
+            return t;
+
+        if (t.getWalletNumber() != claims.getSubject())
+            throw new UnauthorizedException("Couldn't view this topup detail");
+
+        return t;
+
+    }
+
     @TokenAuth(auth_role = "USER", account_type = "customer")
     @PostMapping
     public ResponseEntity<Topup> requestTopup(@RequestBody Topup t,
@@ -55,7 +75,7 @@ public class TopupController {
     }
 
     @TokenAuth
-    @PatchMapping("/confirm/{topupId}")
+    @PatchMapping("/{topupId}/confirm")
     public Topup confirmTopup(@PathVariable("topupId") String topupId) {
         Topup t = topupService.getTopupRepository().findByTransactionId(topupId);
         if (t == null)
@@ -73,7 +93,7 @@ public class TopupController {
     }
 
     @TokenAuth
-    @PatchMapping("/cancel/{topupId}")
+    @PatchMapping("/{topupId}/cancel")
     public Topup cancelTopup(@PathVariable("topupId") String topupId) {
         Topup t = topupService.getTopupRepository().findByTransactionId(topupId);
 

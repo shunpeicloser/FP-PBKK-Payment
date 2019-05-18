@@ -1,5 +1,6 @@
 package me.pyradian.ojackpayment.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -16,12 +17,14 @@ public class Withdrawal extends Transaction{
     @Field("withdrawal_bank_account")
     private String bankAccount;
 
-    public Withdrawal(String walletNumber, int amount, String bankName, String bankAccount) {
+    @JsonCreator
+    public Withdrawal(@JsonProperty("amount") int amount,
+                      @JsonProperty("bank_name") String bankName,
+                      @JsonProperty("bank_account") String bankAccount) {
         // generate withdrawal transaction id
         String hash = DigestUtils.sha1Hex(new Date() + walletNumber + amount + bankAccount + bankName);
 
         this.transactionId = "OJAP-WDR-" + hash;
-        this.walletNumber = walletNumber;
         this.amount = amount;
         this.status = "pending";
         this.bankName = bankName;

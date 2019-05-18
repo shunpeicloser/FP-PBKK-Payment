@@ -69,7 +69,7 @@ public class WithdrawalController {
     }
 
     @TokenAuth
-    @PatchMapping("/confirm/{withdrawalId}")
+    @PatchMapping("/{withdrawalId}/confirm")
     public Withdrawal confirmWithdrawal(@PathVariable("withdrawalId") String withdrawalId) {
         Withdrawal wd = withdrawalService.getWithdrawalRepository().findByTransactionId(withdrawalId);
 
@@ -86,7 +86,7 @@ public class WithdrawalController {
     }
 
     @TokenAuth
-    @PatchMapping("/cancel/{withdrawalId}")
+    @PatchMapping("/{withdrawalId}/cancel")
     public Withdrawal canceledWithdrawal(@PathVariable("withdrawalId") String withdrawalId) {
         Withdrawal wd = withdrawalService.getWithdrawalRepository().findByTransactionId(withdrawalId);
 
