@@ -60,9 +60,10 @@ public class WalletController {
         return w;
     }
 
-    @TokenAuth
+//    @TokenAuth
     @PostMapping
     public ResponseEntity<Wallet> createWallet(@RequestBody Wallet w) {
+//        Wallet k = w;
         this.walletService.isValidWallet(w);
 
         HttpHeaders headers = new HttpHeaders();

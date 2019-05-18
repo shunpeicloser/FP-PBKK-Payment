@@ -41,6 +41,10 @@ public class FoodOrderController {
     @TokenAuth
     @PostMapping
     public ResponseEntity<FoodOrder> requestFoodOrder(@RequestBody FoodOrder fo) {
+        System.out.println(fo.getCustomerWalletNumber());
+        System.out.println(fo.getDriverWalletNumber());
+        System.out.println(fo.getRestaurantWalletNumber());
+//        System.out.println(cust);
         this.foodOrderService.isValid(fo);
 
 
@@ -76,7 +80,7 @@ public class FoodOrderController {
     }
 
     @TokenAuth(auth_role = "USER", account_type = "driver")
-    @PatchMapping("/confirm/{foodOrderId}")
+    @PatchMapping("/{foodOrderId}/confirm")
     public FoodOrder confirmFoodOrder(@PathVariable("foodOrderId") String foodOrderId,
                                       @JwtToken String token) {
         Claims claims = foodOrderService.getClaims(token);
@@ -109,7 +113,7 @@ public class FoodOrderController {
     }
 
     @TokenAuth(auth_role = "USER", account_type = "customer,restaurant")
-    @PatchMapping("/cancel/{foodOrderId}")
+    @PatchMapping("/{foodOrderId}/cancel")
     public FoodOrder cancelFoodOrder(@PathVariable("foodOrderId") String foodOrderId,
                                      @RequestHeader("Authorization") String token) {
         Claims claims = foodOrderService.getClaims(token);

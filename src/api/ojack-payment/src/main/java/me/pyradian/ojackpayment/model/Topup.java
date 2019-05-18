@@ -1,5 +1,6 @@
 package me.pyradian.ojackpayment.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -12,14 +13,14 @@ public class Topup extends Transaction {
     @Field("topup_balance")
     private int topupBalance;
 
-    public Topup(String walletNumber, int topupBalance) {
+    @JsonCreator
+    public Topup(@JsonProperty("balance") int topupBalance) {
         // generate topup transaction id
         String hash = DigestUtils.sha1Hex(new Date() + walletNumber + topupBalance);
 
         this.transactionId = "OJAP-TOP-" + hash;
         this.transactionType = "TOPUP";
         this.cashflow = "credit";
-        this.walletNumber = walletNumber;
         this.topupBalance = topupBalance;
         this.status = "pending";
     }

@@ -1,5 +1,6 @@
 package me.pyradian.ojackpayment.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.querydsl.core.annotations.QueryEntity;
 import org.springframework.data.mongodb.core.index.IndexDirection;
@@ -18,7 +19,13 @@ public class Wallet extends BaseEntity{
     @Field("wallet_type")
     private String type; // DRIVER, CUSTOMER, RESTAURANT
 
-    public Wallet(String walletNumber, String type) {
+//    public Wallet() {
+//
+//    }
+
+    @JsonCreator
+    public Wallet(@JsonProperty("wallet_number") String walletNumber,
+                  @JsonProperty("type") String type) {
         this.walletNumber = walletNumber;
         this.type = type;
     }
@@ -37,6 +44,7 @@ public class Wallet extends BaseEntity{
         this.balance = balance;
     }
 
+    @JsonProperty("type")
     public String getType() {
         return type;
     }

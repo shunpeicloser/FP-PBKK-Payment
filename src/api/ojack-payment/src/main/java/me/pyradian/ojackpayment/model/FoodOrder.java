@@ -1,5 +1,6 @@
 package me.pyradian.ojackpayment.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -14,7 +15,14 @@ public class FoodOrder extends Transaction {
     @Field("wallets")
     private Map<String, WalletShare> foodOrderWallets;
 
-    public FoodOrder(int foodOrderBill, Map<String, WalletShare> foodOrderWallets) {
+    public FoodOrder() {
+
+    }
+
+    @JsonCreator
+    public FoodOrder(@JsonProperty("food_order_bill") int foodOrderBill,
+                     @JsonProperty("food_order_wallets") Map<String, WalletShare> foodOrderWallets) {
+        super();
         // generate food order transaction id
         String hash = DigestUtils.sha1Hex(new Date() + "secretkey");
 
@@ -76,7 +84,8 @@ class WalletShare {
     private String walletNumber;
     private int amount;
 
-    public WalletShare(String walletNumber, int amount) {
+    public WalletShare(@JsonProperty("wallet_number") String walletNumber,
+                       @JsonProperty("amount") int amount) {
         this.walletNumber = walletNumber;
         this.amount = amount;
     }
@@ -86,6 +95,7 @@ class WalletShare {
         return walletNumber;
     }
 
+    @JsonProperty("amount")
     public int getAmount() {
         return amount;
     }
