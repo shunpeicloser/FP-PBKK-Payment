@@ -2,7 +2,7 @@
     // echo $_SESSION['username'];
     // die();
     session_start();
-    if(!isset($_SESSION['username']) || $_SESSION['username'] == ""){
+    if(!isset($_SESSION['username']) || $_SESSION['username'] == "" || !$_SESSION['role']=='customer'){
         header("Location: index.php");
         die();
     }
