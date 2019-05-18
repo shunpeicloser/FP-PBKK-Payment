@@ -59,14 +59,11 @@
         die();
     }
     else if($formname == "topup"){
-        $isdone = "sukses";
-        if($isdone == "sukses"){
-            header("Location: walletdetail.php");
-        }
-        else{
-            $_SESSION['error'] = "error apa tulis sini";
-            header("Location: topup.php");
-        }
+        $body = array('topup_balance'=>(int)$_POST['topupvalue']);
+        $serviceURL = "/api/v1/transaction/topup";
+        $payload = json_encode(['sub'=>$_SESSION['nohp'], 'name'=>$_SESSION['username'], 'rol'=>'USER', 'atp'=>$_SESSION['role']]);
+        $res = json_decode(callAPI($serviceURL, createJWT($payload), "POST", $body));
+        $_SESSION['notification'] = "<br/><div style='border: 2px solid black; background-color: blue;'>Top Up Balance: $res->{'balance'}<br/>Top Up ID: $res->{'transaction_id'}</div>";
         die();
     }
 ?>

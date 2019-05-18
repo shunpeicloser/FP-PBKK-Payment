@@ -12,14 +12,25 @@
         return $jwt;
     }
 
-    function callAPI($serviceurl, $jwt, $method){
+    function callAPI($serviceurl, $jwt, $method, $body=NULL){
         global $baseurl;
-        $opt = array(
-            'http' => array(
-                'method' => $method,
-                'header' => "Authorization: Bearer ".$jwt
-            )
-        );
+        $opt;
+        if($body != NULL){
+            $opt = array(
+                'http' => array(
+                    'method' => $method,
+                    'header' => "Authorization: Bearer ".$jwt
+                )
+            );
+        } else {
+            $opt = array(
+                'http' => array(
+                    'method' => $method,
+                    'header' => "Authorization: Bearer ".$jwt."\r\nContent-Type: application/json\r\n",
+                    'content' => json_encode($body)
+                )
+            );
+        }
         $context = stream_context_create($opt);
         $returned_data = file_get_contents($baseurl.$serviceurl, false, $context);
         return $returned_data;

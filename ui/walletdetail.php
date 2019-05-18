@@ -59,6 +59,7 @@
     <center>
         <br/><br/><br/><br/><br/><br/><br/><br/>
         <fieldset>
+            <?php if($_SESSION['role'] != 'admin') {?>
             <legend><h3>Detil Wallet</h3></legend>
             Nama Pemilik: <?php echo $_SESSION['username']." (".$_SESSION['nohp'].")" ?><br/>
             Saldo: Rp <?php 
@@ -66,7 +67,24 @@
                 $payload = json_encode(['sub'=> $_SESSION['nohp'], 'name'=>$_SESSION['username'], 'rol'=>'USER', 'atp'=>$_SESSION['role']]);
                 $res = json_decode(callAPI($serviceURL, createJWT($payload), "GET"));
                 echo $res->{'balance'};
-            ?><br/>
+            } else { ?>
+
+            <legend><h3>Daftar Wallet</h3></legend>
+            <?php
+                $serviceURL = "/api/v1/wallet";
+                $payload = json_encode(['sub'=>'ROOT', 'name'=>'ROOT', 'rol'=>'ADMIN', 'atp'=>'']);
+                $res = json_decode(callAPI($serviceURL, createJWT($payload), "GET"));
+            
+                foreach($res as $data){
+                    // foreach($datas as $data){
+                        echo "Wallet Number: " . $data->{'wallet_number'} . "(" . $data->{'type'} .")<br/>";
+                        echo "Balance: " . $data->{'balance'} . "<br/><br/>";
+                    // }
+                }
+                
+            }?>
+            
+            <br/>
         </fieldset>
     </center>
 </body>
