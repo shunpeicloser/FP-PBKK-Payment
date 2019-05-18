@@ -14,7 +14,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>OJAK Pay</title>
+    <title>OJAK Pay: Home</title>
     <style>
         body{
             background-image: url("resources/image/logo.jpg");
@@ -34,12 +34,24 @@
             margin-bottom: 10vh;
         }
         h3{
+            display: inline;
             margin-top: 0px;
         }
         button#logoutbutton{
             position: absolute;
-            right: 20px;
-            top: 20px;
+            right: 10px;
+            top: 10px;
+        }
+        span.featurebutton{
+            position: relative;
+            font-size: 40px;
+        }
+        span button{
+            width: 40vw;
+            height: 15vw;
+        }
+        span form{
+            display: inline;
         }
     </style>
 </head>
@@ -49,7 +61,17 @@
         <button type="submit" id='logoutbutton'>LOGOUT</button>
     </form>
     <center>
-
+        <br/><br/><br/><br/><br/><br/><br/><br/>
+        <fieldset>
+            <legend><h3>Fitur</h3></legend>
+            <span class="featurebutton">
+                <a href='walletdetail.php'><button>Cek Wallet</button></a>
+            </span>
+            <span class="featurebutton">
+                <a href='topup.php'><button>Top Up</button></a>
+            </span>
+            
+        </fieldset>
     </center>
 </body>
 </html>

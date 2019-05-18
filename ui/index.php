@@ -22,9 +22,9 @@
             background-size: 100% 100vh;
         }
 
-        form{
+        fieldset{
             /* border: 2px inset black; */
-            /* width: 80vw; */
+            width: 50vw;
             /* padding-top: 20px; */
             /* padding-bottom: 20px; */
             /* background-color: cornflowerblue; */
@@ -38,8 +38,8 @@
         }
         button#regbutton{
             position: absolute;
-            right: 20px;
-            top: 20px;
+            right: 10px;
+            top: 10px;
         }
     </style>
 </head>
@@ -48,11 +48,13 @@
     <center>
     <h1>OJAK Pay</h1><br/>
     <form action="controller.php" method="post">
-        <input type="text" name="username" placeholder="username" autofocus><br/><br/>
-        <input type="password" name="password" placeholder="password"><br/><br/>
-        <input type="hidden" value= "login" name="formname">
-       
-        <button type="submit">LOGIN</button>
+        <fieldset>
+            <input type="text" name="username" placeholder="username" autofocus><br/><br/>
+            <input type="password" name="password" placeholder="password"><br/><br/>
+            <input type="hidden" value= "login" name="formname">
+        
+            <button type="submit">LOGIN</button>
+        </fieldset>
     </form>
     <?php
         if(isset($_SESSION['error']) && $_SESSION['error'] != ""){

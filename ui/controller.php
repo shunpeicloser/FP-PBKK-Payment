@@ -27,9 +27,19 @@
 
     else if($formname == "logout"){
         session_unset();
-        header("Location: index.php");
         session_destroy();
+        header("Location: index.php");
         die();
     }
-
+    else if($formname == "topup"){
+        $isdone = "sukses";
+        if($isdone == "sukses"){
+            header("Location: walletdetail.php");
+        }
+        else{
+            $_SESSION['error'] = "error apa tulis sini";
+            header("Location: topup.php");
+        }
+        die();
+    }
 ?>
