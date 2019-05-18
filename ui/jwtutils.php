@@ -1,6 +1,7 @@
 <?php
+    include "curl.h";
     function createJWT($payload, $secretkey){
-        $header = json_encode(['typ' => 'JWT', 'alg' => 'HS512']);
+        $header = json_encode(['alg' => 'HS512', 'typ' => 'JWT']);
         $header = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header));
         $payload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($payload));
         $signature = hash_hmac('sha512', $header . "." . $payload, $secretkey, true);
@@ -9,8 +10,19 @@
         return $jwt;
     }
 
-    function callAPI($url, $jwt){
+    function callAPI($baseurl, $serviceurl, $jwt, $method){
+        $opt = array(
+            'http' => array(
+                'method' => $method,
+                'header' => "Authorization: Bearer ".$jwt
+            )
+        );
 
+        $context = stream_context_create($opt);
+        
+        $returned_data = file_get_contents($baseurl.$serviceurl, false, $context);
+
+        return $returned_data;
     }
 
 ?>
