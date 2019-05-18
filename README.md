@@ -185,13 +185,38 @@ This resource handles 'Topup' entity. 'Topup' inherits 'Transaction' entity.
     ```
   - Note: **ADMIN can view all topup transaction. USER can only view their wallet's topup transaction**
   ---
+- Show Individual Topup Detail
+  - Method  : **GET**
+  - Role    : **ADMIN**, **USER** => **['customer']**
+  - URL     : **/api/v1/transaction/topup/{topupId}**
+  - Sample Request:
+    ```
+    Request URL: /api/v1/transaction/topup/OJAP-TOP-15b82eb6ee228e4b2178dca6f19fd783dc60d0bd
+    Body: None
+    ```
+  - Sample Response:
+    ```
+    {
+      "id": "5cd6ea491a40fc6cb0936245",
+      "cashflow": "credit",
+      "status": "pending",
+      "created_date": "2019-05-11T15:29:13.063+0000",
+      "last_modified_date": "2019-05-11T15:29:13.063+0000",
+      "transaction_type": "TOPUP",
+      "transaction_id": "OJAP-TOP-15b82eb6ee228e4b2178dca6f19fd783dc60d0bd",
+      "wallet_number": "6288804862376",
+      "topup_balance": 50000
+    }
+    ```
+  - Note: **ADMIN can view all topup transaction. USER can only view their wallet's topup transaction**
+  ---
 - Confirm Topup Transaction
   - Method  : **PATCH**
   - Role    : **ADMIN**
-  - URL     : **/api/v1/transaction/topup/confirm/{topupId}**
+  - URL     : **/api/v1/transaction/topup/{topupId}/confirm**
   - Sample Request:
     ```
-    Request URL: /api/v1/transaction/topup/confirm/OJAP-TOP-9dc3863c189f5af50cc5be6bef9a75acf66b582a
+    Request URL: /api/v1/transaction/topup/OJAP-TOP-9dc3863c189f5af50cc5be6bef9a75acf66b582a/confirm
     Body: None
     ```
   - Sample Response:
@@ -212,10 +237,10 @@ This resource handles 'Topup' entity. 'Topup' inherits 'Transaction' entity.
 - Cancel Topup Transaction
   - Method  : **PATCH**
   - Role    : **ADMIN**
-  - URL     : **/api/v1/transaction/topup/cancel/{topupId}**
+  - URL     : **/api/v1/transaction/topup/{topupId}/cancel**
   - Sample Request:
     ```
-    Request URL: /api/v1/transaction/topup/cancel/OJAP-TOP-15b82eb6ee228e4b2178dca6f19fd783dc60d0bd
+    Request URL: /api/v1/transaction/topup/OJAP-TOP-15b82eb6ee228e4b2178dca6f19fd783dc60d0bd/cancel
     Body: None
     ```
   - Sample Response:
