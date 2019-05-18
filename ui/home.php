@@ -64,13 +64,26 @@
         <br/><br/><br/><br/><br/><br/><br/><br/>
         <fieldset>
             <legend><h3>Fitur</h3></legend>
+            <?php if($_SESSION['role'] != 'admin'){ ?>
             <span class="featurebutton">
                 <a href='walletdetail.php'><button>Cek Wallet</button></a>
             </span>
+            <?php } ?>
+
+            <?php if($_SESSION['role'] == 'customer'){ ?>
             <span class="featurebutton">
                 <a href='topup.php'><button>Top Up</button></a>
             </span>
-            
+            <?php } ?>
+
+            <?php if($_SESSION['role'] == 'admin'){ ?>
+            <span class="featurebutton">
+                <a href='walletdetail.php'><button>Daftar Wallet</button></a>
+            </span>
+            <span class="featurebutton">
+                <a href='topuprequest.php'><button>Top Up Request</button></a>
+            </span>
+            <?php } ?>
         </fieldset>
     </center>
 </body>

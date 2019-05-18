@@ -10,7 +10,7 @@
         $frole;
         for($i=0;($line = fgets($handle));$i++){
             list($fusername[$i],$fnohp[$i],$frole[$i])=preg_split('/ /',$line);
-            $frole[$i] = substr($frole[$i],0,-2);
+            $frole[$i] = substr($frole[$i],0,-1);
         }
         $username = $_POST["username"];
         $password = $_POST["password"];

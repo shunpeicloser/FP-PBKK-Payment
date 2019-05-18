@@ -6,6 +6,7 @@
         header("Location: index.php");
         die();
     }
+    require_once("jwtutils.php");
 ?>
 
 <!DOCTYPE html>
@@ -59,8 +60,13 @@
         <br/><br/><br/><br/><br/><br/><br/><br/>
         <fieldset>
             <legend><h3>Detil Wallet</h3></legend>
-            Nama Pemilik:<br/>
-            Saldo: Rp <br/>
+            Nama Pemilik: <?php echo $_SESSION['username']." (".$_SESSION['nohp'].")" ?><br/>
+            Saldo: Rp <?php 
+                $serviceURL = "/api/v1/wallet/".$_SESSION['nohp'];
+                $payload = json_encode(['sub'=> $_SESSION['nohp'], 'name'=>$_SESSION['username'], 'rol'=>'USER', 'atp'=>$_SESSION['role']]);
+                $res = json_decode(callAPI($serviceURL, createJWT($payload), "GET"));
+                echo $res->{'balance'};
+            ?><br/>
         </fieldset>
     </center>
 </body>
