@@ -52,7 +52,7 @@ public class TopupController {
         if (claims.get("rol").equals("ADMIN"))
             return t;
 
-        if (t.getWalletNumber() != claims.getSubject())
+        if (!t.getWalletNumber().equals(claims.getSubject()))
             throw new UnauthorizedException("Couldn't view this topup detail");
 
         return t;
