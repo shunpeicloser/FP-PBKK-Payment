@@ -1,5 +1,6 @@
 <?php
     session_start();
+    require_once("jwtutils.php");
     $formname = $_POST["formname"];
 
     if($formname == "login"){
@@ -9,6 +10,9 @@
         $status = "accepted"; // user auth here
         if($status == "accepted"){
             $_SESSION['username'] = $username;
+            if($username == "alcredo"){
+                $_SESSION['nohp'] = "6288804862379";
+            }
             header("Location: home.php");
         }
         else{
