@@ -2,10 +2,11 @@
     // echo $_SESSION['username'];
     // die();
     session_start();
-    if(!isset($_SESSION['username']) || $_SESSION['username'] == "" || $_SESSION['role']!='customer'){
+    if(!isset($_SESSION['username']) || $_SESSION['username'] == "" || $_SESSION['role']!='admin'){
         header("Location: index.php");
         die();
     }
+    require_once("jwtutils.php");
 ?>
 
 <!DOCTYPE html>
@@ -57,27 +58,32 @@
     <a href="home.php"><button id='homebutton'>HOME</button></a>
     <center>
         <br/><br/><br/><br/><br/><br/><br/><br/>
-        <fieldset>
-            <legend><h3>Masukkan Nominal</h3></legend>
-            <form action="controller.php" method="post">
-                <input type="number" placeholder="0" name="topupvalue">
-
-                <input type="hidden" value= "topup" name="formname"><br/><br/>
-                <button type="submit">Top Up</button>
-            </form>
-        </fieldset>
         <?php
-            if(isset($_SESSION['error']) && $_SESSION['error'] != ""){
-                echo $_SESSION['error'];
-                $_SESSION['error'] = "";
-                unset($_SESSION['error']);
-            }
             if(isset($_SESSION['notification']) && $_SESSION['notification'] != ""){
                 echo $_SESSION['notification'];
                 $_SESSION['notification'] = "";
                 unset($_SESSION['notification']);
             }
+            echo "<br/><br/>";
         ?>
+        <?php 
+            $serviceURL = "/api/v1/transaction/topup";
+            $payload = json_encode(['sub'=>'ROOT', 'name'=>'ROOT', 'rol'=>'ADMIN', 'atp'=>'']);
+            $res = json_decode(callAPI($serviceURL, createJWT($payload), "GET"));
+
+            foreach($res as $data){
+                if($data->status == "pending"){
+        ?>
+                <form style="border: 2px solid black; margin-bottom: 25px;" action="controller.php" method="post">
+                    <h3><?php echo $data->transaction_id ?></h3>
+                    <p>Wallet Number: <?php echo $data->wallet_number ?></p>
+                    <p>Top up Balance: <?php echo $data->topup_balance ?></p>
+                    <input type="hidden" value= "topupconfirmation" name="formname">
+                    <input type="hidden" value= "<?php echo $data->transaction_id ?>" name="transactionID">
+                    <input type="submit" name="buttonval" value="cancel">
+                    <input type="submit" name="buttonval" value="confirm"><br/><br/><br/>
+                </form>
+        <?php }} ?>
     </center>
 </body>
 </html>

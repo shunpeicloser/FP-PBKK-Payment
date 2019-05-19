@@ -81,4 +81,14 @@
         header('Location: topup.php');
         die();
     }
+    else if($formname == "topupconfirmation"){
+        $act = $_POST['buttonval'];
+        $tid = $_POST['transactionID'];
+        $serviceURL = "/api/v1/transaction/topup/$tid/$act";
+        $payload = json_encode(['sub'=>'ROOT', 'name'=>'ROOT', 'rol'=>'ADMIN', 'atp'=>'']);
+        $res = json_decode(callAPI($serviceURL, createJWT($payload), "PATCH"));
+        $_SESSION['notification'] = "<br/><div style='border: 2px solid black; background-color: blue;'>$tid has been {$act}ed</div>";
+        header('Location: topuprequest.php');
+        die();
+    }
 ?>
