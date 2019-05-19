@@ -63,7 +63,10 @@
         $serviceURL = "/api/v1/transaction/topup";
         $payload = json_encode(['sub'=>$_SESSION['nohp'], 'name'=>$_SESSION['username'], 'rol'=>'USER', 'atp'=>$_SESSION['role']]);
         $res = json_decode(callAPI($serviceURL, createJWT($payload), "POST", $body));
-        $_SESSION['notification'] = "<br/><div style='border: 2px solid black; background-color: blue;'>Top Up Balance: $res->{'balance'}<br/>Top Up ID: $res->{'transaction_id'}</div>";
+        $tb = (string)$res->topup_balance;
+        $tid = (string)$res->transaction_id;
+        $_SESSION['notification'] = "<br/><div style='border: 2px solid black; background-color: blue;'>Top Up Balance: $tb<br/>Top Up ID: $tid</div>";
+        header('Location: topup.php');
         die();
     }
 ?>
