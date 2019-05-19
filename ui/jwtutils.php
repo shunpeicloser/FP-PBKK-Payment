@@ -27,12 +27,13 @@
                 'http' => array(
                     'method' => $method,
                     'header' => "Authorization: Bearer ".$jwt."\r\nContent-Type: application/json\r\n",
-                    'content' => json_encode($body)
+                    'content' => $body
                 )
             );
         }
         $context = stream_context_create($opt);
         $returned_data = file_get_contents($baseurl.$serviceurl, false, $context);
+        var_dump($returned_data);
         return $returned_data;
     }
 
