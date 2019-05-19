@@ -15,7 +15,7 @@
     function callAPI($serviceurl, $jwt, $method, $body=NULL){
         global $baseurl;
         $opt;
-        if($body != NULL){
+        if($body == NULL){
             $opt = array(
                 'http' => array(
                     'method' => $method,

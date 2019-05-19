@@ -43,12 +43,24 @@
         $new_password = $_POST['password'];
         $new_nohp = $_POST['nohp'];
         $new_role = $_POST['role'];
-        $_SESSION['username']=$new_username;
-        $_SESSION['nohp']=$new_nohp;
-        $_SESSION['role']=$new_role;
-        $file = fopen("user.file","a");
-        fprintf($file,"%s %s %s\n",$new_username,$new_nohp,$new_role);
-        header("Location: home.php");
+        $rol='USER';
+
+        $serviceURL = "/api/v1/wallet";
+        $payload = json_encode(['sub'=>'ROOT', 'name'=>'ROOT', 'rol'=>'ADMIN', 'atp'=>'']);
+        $body = json_encode(["wallet_number"=> $new_nohp,"type"=> $new_role]);
+        $res = json_decode(callAPI($serviceURL, createJWT($payload), "POST",$body));
+        if(!$res){
+            $_SESSION['error'] = "<br/><div id='errormsg' style='border: 2px solid black; width: 20vw; background-color: red;'>No. HP sudah terdaftar</div>";
+            header("Location: register.php");
+        }
+        else{
+            $_SESSION['username']=$new_username;
+            $_SESSION['nohp']=$new_nohp;
+            $_SESSION['role']=$new_role;
+            $file = fopen("user.file","a");
+            fprintf($file,"%s %s %s\n",$new_username,$new_nohp,$new_role);
+            header("Location: home.php");
+        }
         die();
     }
 
