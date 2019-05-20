@@ -411,3 +411,76 @@ This resource handles 'Topup' entity. 'Topup' inherits 'Transaction' entity.
     }
     ```
   ---
+- Confirm Food Order Transaction
+  - Method  : **PATCH**
+  - Role    : **USER** => **['driver']**
+  - URL     : **/api/v1/transaction/foodorder/{foodOrderId}/confirm**
+  - Sample Request:
+    ```
+    Request URL: /api/v1/transaction/foodorder/OJAP-FOD-0758e0b38c8a54b4f1c029a40c63fcedc02b10a7/confirm
+    Body: None
+    ```
+  - Sample Response:
+    ```
+    {
+      "food_order_bill": 20000,
+      "food_order_wallets": {
+        "customer": {
+          "wallet_number": "6288804862376",
+          "amount": 20000
+        },
+        "driver": {
+          "wallet_number": "6288804862377",
+          "amount": 3000
+        },
+        "restaurant": {
+          "wallet_number": "6288804862378",
+          "amount": 17000
+        }
+      },
+      "id": "5ce04ec21a40fc7e78a46e94",
+      "cashflow": "debit",
+      "status": "confirmed",
+      "created_date": "2019-05-19 01:28:18",
+      "last_modified_date": "2019-05-19 01:28:18",
+      "transaction_type": "FOODORDER",
+      "transaction_id": "OJAP-FOD-0758e0b38c8a54b4f1c029a40c63fcedc02b10a7"
+    }
+    ```
+  ---
+- Cancel Food Order Transaction
+  - Method  : **PATCH**
+  - Role    : **USER** => **['customer', 'restaurant']**
+  - URL     : **/api/v1/transaction/foodorder/{foodOrderId}/cancel**
+  - Sample Request:
+    ```
+    Request URL: /api/v1/transaction/foodorder/OJAP-FOD-0758e0b38c8a54b4f1c029a40c63fcedc02b10a7/cancel
+    Body: None
+    ```
+  - Sample Response:
+    ```
+    {
+      "food_order_bill": 20000,
+      "food_order_wallets": {
+        "customer": {
+          "wallet_number": "6288804862376",
+          "amount": 20000
+        },
+        "driver": {
+          "wallet_number": "6288804862377",
+          "amount": 3000
+        },
+        "restaurant": {
+          "wallet_number": "6288804862378",
+          "amount": 17000
+        }
+      },
+      "id": "5ce04ec21a40fc7e78a46e94",
+      "cashflow": "debit",
+      "status": "canceled",
+      "created_date": "2019-05-19 01:28:18",
+      "last_modified_date": "2019-05-19 01:28:18",
+      "transaction_type": "FOODORDER",
+      "transaction_id": "OJAP-FOD-0758e0b38c8a54b4f1c029a40c63fcedc02b10a7"
+    }
+    ```
