@@ -24,7 +24,7 @@ public class NotificationAPICallServiceImpl implements NotificationAPICallServic
     }
 
     @Override
-    public int sendNotification(String message) {
+    public boolean sendNotification(String message) {
         // mockup token
         String token = "dfiud8fhgdifhudifhg";
 
@@ -40,10 +40,10 @@ public class NotificationAPICallServiceImpl implements NotificationAPICallServic
         try {
             respNotif = notif.execute();
             System.out.println(respNotif.body());
-            return 0;
+            return true;
         } catch (Exception e) {
             System.out.println("error " + e);
         }
-        return -1;
+        return false;
     }
 }
