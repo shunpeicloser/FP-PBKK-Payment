@@ -39,7 +39,7 @@
     // statis pake x-www-form-urlencoded
     function callCustomerAPI($basicval, $username, $password){
         $usertype = ["user", "driver", "restaurant"];
-        $opt;
+        $opt; $type;
         $url = 'https://rendoru.com/kuliah/pbkk/oauth/token';
 
         foreach($usertype as $prefix){
@@ -60,12 +60,14 @@
             $context = stream_context_create($opt);
             $returned_data = file_get_contents($url, false, $context);
             if($returned_data != false){
+                $type = $prefix ."s";
                 break;
             }
         }
         if($returned_data == false){
             return 0;
         }
+        
         $jwt = json_decode($returned_data);
         $jwt = $jwt->access_token;
         $url = 'https://rendoru.com/kuliah/pbkk/oauth/check_token';
@@ -89,7 +91,7 @@
         // var_dump(implode(",", $returned_data)); die();
         $tmp = "$returned_data[sub]";
         // $tmp = (string)$tmp;
-        $url = "https://rendoru.com/kuliah/pbkk/users/".$tmp;
+        $url = "https://rendoru.com/kuliah/pbkk/$type/".$tmp;
         // echo $url; die();
         $opt = array(
             'http' => array(
@@ -104,6 +106,15 @@
         $ret1 = "$returned_data[no_handphone]";
         $ret2 = "$returned_data[identifier]";
         // var_dump($ret); die();
+
+        $url = "/api/v1/wallet/" . $ret1;
+        $payload = json_encode(['sub'=>$ret1, 'name'=>$username, 'rol'=>'USER', 'atp'=>$ret2]);
+        echo $payload; die();
+        var_dump(callAPI($url, createJWT($payload), "GET")); die();
+        if(callAPI($url, createJWT($payload), "GET") == false){
+            return 0;
+        }
+
         return [$ret1, $ret2];
     }
 
