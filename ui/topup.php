@@ -2,7 +2,7 @@
     // echo $_SESSION['username'];
     // die();
     session_start();
-    if(!isset($_SESSION['username']) || $_SESSION['username'] == "" || !$_SESSION['role']=='customer'){
+    if(!isset($_SESSION['username']) || $_SESSION['username'] == "" || $_SESSION['role']!='customer'){
         header("Location: index.php");
         die();
     }
@@ -66,6 +66,18 @@
                 <button type="submit">Top Up</button>
             </form>
         </fieldset>
+        <?php
+            if(isset($_SESSION['error']) && $_SESSION['error'] != ""){
+                echo $_SESSION['error'];
+                $_SESSION['error'] = "";
+                unset($_SESSION['error']);
+            }
+            if(isset($_SESSION['notification']) && $_SESSION['notification'] != ""){
+                echo $_SESSION['notification'];
+                $_SESSION['notification'] = "";
+                unset($_SESSION['notification']);
+            }
+        ?>
     </center>
 </body>
 </html>
