@@ -1,6 +1,7 @@
 package me.pyradian.ojackpayment.service;
 
 import com.google.gson.JsonObject;
+import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -8,6 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.util.Map;
 
+@Service
 public class AccountingAPICallServiceImpl implements AccountingAPICallService {
     private final String base_url = "https://ojoakua.site/accounting";
     private Retrofit retro;
