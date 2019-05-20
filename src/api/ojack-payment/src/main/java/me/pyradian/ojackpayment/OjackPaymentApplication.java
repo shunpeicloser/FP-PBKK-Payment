@@ -7,9 +7,9 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 
-@EntityScan(
-        basePackageClasses = {Application.class, Jsr310Converters.class}
-)
+//@EntityScan(
+//        basePackageClasses = {Application.class, Jsr310Converters.class}
+//)
 @SpringBootApplication
 @EnableMongoAuditing
 public class OjackPaymentApplication {
