@@ -259,8 +259,149 @@ This resource handles 'Topup' entity. 'Topup' inherits 'Transaction' entity.
     }
     ```
 ---
+### Withdrawal Resource
+#### Operations
+This resource handles 'Withdrawal' entity. 'Withdrawal' inherits 'Transaction' entity.
+- Request for Withdrawal
+  - Method  : **POST**
+  - Role    : **USER** => **['driver', 'restaurant']**
+  - URL     : **/api/v1/transaction/withdrawal**
+  - Sample Request:
+    ```
+    Body:
+    {
+      "amount": 10000,
+      "bank_name": "BNI",
+      "bank_account": "81237434"
+    }
+  
+    Description:
+    - amount: amount of balance to withdraw
+    ```
+  - Sample Response:
+    ```
+    {
+      "amount": 10000,
+      "bank_name": "BNI",
+      "bank_account": "81237434",
+      "id": "5ce253811a40fc7e78a46eb1",
+      "cashflow": "debit",
+      "status": "pending",
+      "created_date": "2019-05-20 02:13:05",
+      "last_modified_date": "2019-05-20 02:13:05",
+      "transaction_type": "WITHDRAWAL",
+      "transaction_id": "OJAP-WDR-3e4aa873d06f312545bbf690f0eb563a227ebb85",
+      "wallet_number": "6288804862377"
+    }
+    ```
+  ---
+- List Withdrawal Transaction
+  - Method  : **GET**
+  - Role    : **ADMIN**, **USER** => **['driver', 'restaurant']**
+  - URL     : **/api/v1/transaction/withdrawal**
+  - Sample Request: None
+  - Sample Response:
+    ```
+    [
+      {
+        "amount": 10000,
+        "bank_name": "BNI",
+        "bank_account": "81237434",
+        "id": "5ce253811a40fc7e78a46eb1",
+        "cashflow": "debit",
+        "status": "pending",
+        "created_date": "2019-05-20 02:13:05",
+        "last_modified_date": "2019-05-20 02:13:05",
+        "transaction_type": "WITHDRAWAL",
+        "transaction_id": "OJAP-WDR-3e4aa873d06f312545bbf690f0eb563a227ebb85",
+        "wallet_number": "6288804862377"
+      }
+    ]
+    ```
+  - Note: **ADMIN can view all topup transaction. USER can only view their wallet's topup transaction**
+  ---
+- Show Individual Withdrawal Detail
+  - Method  : **GET**
+  - Role    : **ADMIN**, **USER** => **['driver', 'customer']**
+  - URL     : **/api/v1/transaction/withdrawal/{withdrawalId}**
+  - Sample Request:
+    ```
+    Request URL: /api/v1/transaction/withdrawal/OJAP-WDR-3e4aa873d06f312545bbf690f0eb563a227ebb85
+    Body: None
+    ```
+  - Sample Response:
+    ```
+    {
+      "amount": 10000,
+      "bank_name": "BNI",
+      "bank_account": "81237434",
+      "id": "5ce253811a40fc7e78a46eb1",
+      "cashflow": "debit",
+      "status": "pending",
+      "created_date": "2019-05-20 02:13:05",
+      "last_modified_date": "2019-05-20 02:13:05",
+      "transaction_type": "WITHDRAWAL",
+      "transaction_id": "OJAP-WDR-3e4aa873d06f312545bbf690f0eb563a227ebb85",
+      "wallet_number": "6288804862377"
+    }
+    ```
+  - Note: **ADMIN can view all topup transaction. USER can only view their wallet's topup transaction**
+  ---
+- Confirm Withdrawal Transaction
+  - Method  : **PATCH**
+  - Role    : **ADMIN**
+  - URL     : **/api/v1/transaction/withdrawal/{withdrawalId}/confirm**
+  - Sample Request:
+    ```
+    Request URL: /api/v1/transaction/withdrawal/OJAP-WDR-3e4aa873d06f312545bbf690f0eb563a227ebb85/confirm
+    Body: None
+    ```
+  - Sample Response:
+    ```
+    {
+      "amount": 10000,
+      "bank_name": "BNI",
+      "bank_account": "81237434",
+      "id": "5ce253811a40fc7e78a46eb1",
+      "cashflow": "debit",
+      "status": "confirmed",
+      "created_date": "2019-05-20 02:13:05",
+      "last_modified_date": "2019-05-20 02:13:05",
+      "transaction_type": "WITHDRAWAL",
+      "transaction_id": "OJAP-WDR-3e4aa873d06f312545bbf690f0eb563a227ebb85",
+      "wallet_number": "6288804862377"
+    }
+    ```
+  ---
+- Cancel Withdrawal Transaction
+  - Method  : **PATCH**
+  - Role    : **ADMIN**
+  - URL     : **/api/v1/transaction/withdrawal/{withdrawalId}/cancel**
+  - Sample Request:
+    ```
+    Request URL: /api/v1/transaction/withdrawal/OJAP-WDR-3e4aa873d06f312545bbf690f0eb563a227ebb85/cancel
+    Body: None
+    ```
+  - Sample Response:
+    ```
+    {
+      "amount": 10000,
+      "bank_name": "BNI",
+      "bank_account": "81237434",
+      "id": "5ce253811a40fc7e78a46eb1",
+      "cashflow": "debit",
+      "status": "canceled",
+      "created_date": "2019-05-20 02:13:05",
+      "last_modified_date": "2019-05-20 02:13:05",
+      "transaction_type": "WITHDRAWAL",
+      "transaction_id": "OJAP-WDR-3e4aa873d06f312545bbf690f0eb563a227ebb85",
+      "wallet_number": "6288804862377"
+    }
+    ```
+---
 ### Food Order Resource
 #### Operations
+This resource handles 'FoodOrder' entity. 'FoodOrder' inherits 'Transaction' entity.
 - List Food Order Transaction
   - Method  : **GET**
   - Role    : **ADMIN**, **USER** => **['customer', 'user', 'driver']**
